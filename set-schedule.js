@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let endInput = document.getElementById("end");
   defaultValue = "00:00";
   chrome.storage.sync.get({ start: defaultValue }, function (data) {
-    console.log(data.start)
     startInput.value = data.start
   });
   chrome.storage.sync.get({ end: defaultValue }, function (data) {
@@ -19,6 +18,5 @@ function setStart(e){
 }
 function setEnd(e){
     let value = e.target.value;
-    console.log(value)
     chrome.storage.sync.set({ end: value }, function () {});
 }

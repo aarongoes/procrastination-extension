@@ -10,9 +10,6 @@ function addWebsite() {
       defaultValue = [];
       chrome.storage.sync.get({ links: defaultValue }, function (data) {
         data.links.push(link);
-        chrome.storage.sync.set({ links: data.links }, function () {
-            console.log(data.links);
-        });
       });
     }
 }

@@ -1,3 +1,5 @@
+const notificationId = "procrastinatorhelper";
+
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
   defaultValue = [];
   chrome.storage.sync.get({ links: defaultValue }, function (data) {
@@ -23,10 +25,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
                   (Number(endList[1]) >= time.getHours() &&
                     endList[1] >= time.getMinutes())
                 ) {
-                  if (confirm("Are you procrastinating right now?")) {
-                    var newURL = "https://pressurecooker.aarongoes.nl/";
-                    chrome.tabs.create({ url: newURL });
-                  }
+                  fireNotification();
                 }
               });
             }
@@ -35,4 +34,35 @@ chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
       }
     });
   });
+});
+
+function fireNotification() {
+  chrome.notifications.create(notificationId, {
+    type: "basic",
+    iconUrl: "./icon.png",
+    title: "Procrastinator Helper",
+    message: "Are you procrastinating right now?",
+    priority: 2,
+    requireInteraction: true,
+    buttons: [
+      {
+        title: "Yes",
+      },
+      {
+        title: "No",
+      },
+    ],
+  });
+}
+
+chrome.notifications.onClicked.addListener(function (id) {
+  if (id == notificationId) {
+    this.fireNotification();
+  }
+});
+chrome.notifications.onButtonClicked.addListener(function (id, buttonIndex) {
+  if (id == notificationId && buttonIndex == 0) {
+    var newURL = "https://pressurecooker.aarongoes.nl/";
+    chrome.tabs.create({ url: newURL });
+  }
 });
